@@ -12,7 +12,6 @@
 // MUTEX:
 // Mutex is used to avoid race condtion
 // We use lock(), unlock() on mutex to avoid race condition
-
 #include <iostream>
 #include <thread>
 #include <mutex>

@@ -18,6 +18,7 @@ This is achieved by using additional counters to track the number of waiting mal
 #include <mutex>
 #include <condition_variable>
 using namespace std;
+// Here the problem which is solved is staration in the previous code. There is a possiblity that when counter ==0 if females are using the bathroom then its possible that the male will never get a chance to use the bathroom. as another female might enter and this can keep on happening causing starvation(vice-versa)
 class UnisexBathroom
 {
     int counter = 0;
@@ -33,7 +34,7 @@ public:
         unique_lock<mutex> lock(mtx);
         waitingMales++;
         cv.wait(lock, [&]
-                { return (counter < 3 && (gender == 'M' || gender == 'N')) && (waitingFemales == 0 || gender == 'M'); });
+                { return (counter < 3 && (gender == 'M' || gender == 'N')) && (waitingFemales == 0); });
         waitingMales--;
         counter++;
         cout << name << " Entered the bathroom." << endl;
@@ -57,7 +58,7 @@ public:
         unique_lock<mutex> lock(mtx);
         waitingFemales++;
         cv.wait(lock, [&]
-                { return (counter < 3 && (gender == 'F' || gender == 'N')) && (waitingMales == 0 || gender == 'F'); });
+                { return (counter < 3 && (gender == 'F' || gender == 'N')) && (waitingMales == 0); });
         counter++;
         waitingFemales--;
         cout << name << " Entered the bathroom." << endl;
